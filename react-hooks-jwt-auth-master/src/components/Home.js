@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import UserService from "../services/user.service";
+import UserService from '../services/user.service';
 
+// The BoardAdmin, BoardModerator, BoardUser, and Home modules all have the same code because they serve the same purpose but for different users
 const Home = () => {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     UserService.getPublicContent().then(

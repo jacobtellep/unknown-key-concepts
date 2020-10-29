@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
 import CheckButton from 'react-validation/build/button';
-import { isEmail } from 'validator';
 
 import AuthService from '../services/auth.service';
 
@@ -16,66 +15,55 @@ const required = (value) => {
   }
 };
 
-const validEmail = (value) => {
-  if (!isEmail(value)) {
-    // built in function of validator
-    return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid email.
-      </div>
-    );
-  }
-};
-
-const vusername = (value) => {
+const vdate = (value) => {
   // checks to make sure username is the right length, and alerts user if not followed
-  if (value.length < 3 || value.length > 20) {
+  if (value.length < 3 || value.length > 10) {
     return (
       <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
+        Please enter valid date.
       </div>
     );
   }
 };
 
-const vpassword = (value) => {
+const vforeman = (value) => {
   // checks to make sure password is the right length, and alerts user if not followed
-  if (value.length < 6 || value.length > 40) {
+  if (value.length <= 0 || value.length > 40) {
     return (
       <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
+        Please enter a foreman name.
       </div>
     );
   }
 };
 
-const Register = (props) => {
+const CreateForm = (props) => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [date, setDate] = useState('');
+  const [foreman, setForeman] = useState('');
+  const [jobDelay, setJobDelay] = useState('');
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState('');
 
   // below code sets the hook variables to the user inputs
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const onChangeDate = (e) => {
+    const date = e.target.value;
+    setDate(date);
   };
 
-  const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
+  const onChangeForeman = (e) => {
+    const foreman = e.target.value;
+    setForeman(foreman);
   };
 
-  const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
+  const onChangeJobDelay = (e) => {
+    const jobDelay = e.target.value;
+    setJobDelay(jobDelay);
   };
 
-  const handleRegister = (e) => {
+  const handleCreateForm = (e) => {
     e.preventDefault();
 
     setMessage('');
@@ -85,7 +73,7 @@ const Register = (props) => {
 
     if (checkBtn.current.context._errors.length === 0) {
       // makes axios request to backend to insert data into database if no errors occurred in validation
-      AuthService.register(username, email, password).then(
+      AuthService.getCreateForm(date, foreman, jobDelay).then(
         (response) => {
           setMessage(response.data.message);
           setSuccessful(true);
@@ -114,47 +102,48 @@ const Register = (props) => {
           className="profile-img-card"
         /> */}
 
-        <Form onSubmit={handleRegister} ref={form}>
+        <Form onSubmit={handleCreateForm} ref={form}>
           {!successful && (
             <div>
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="date">Date</label>
                 <Input
                   type="text"
                   className="form-control"
-                  name="username"
-                  value={username}
-                  onChange={onChangeUsername}
-                  validations={[required, vusername]}
+                  name="date"
+                  value={date}
+                  onChange={onChangeDate}
+                  validations={[required, vdate]}
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="foreman">Foreman</label>
                 <Input
                   type="text"
                   className="form-control"
-                  name="email"
-                  value={email}
-                  onChange={onChangeEmail}
-                  validations={[required, validEmail]}
+                  name="foreman"
+                  value={foreman}
+                  onChange={onChangeForeman}
+                  validations={[required, vforeman]}
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="job-delay">Job Delay</label>
                 <Input
-                  type="password"
+                  type="text"
                   className="form-control"
-                  name="password"
-                  value={password}
-                  onChange={onChangePassword}
-                  validations={[required, vpassword]}
+                  name="job-delay"
+                  value={jobDelay}
+                  onChange={onChangeJobDelay}
                 />
               </div>
 
               <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
+                <button className="btn btn-primary btn-block">
+                  Submit Form
+                </button>
               </div>
             </div>
           )}
@@ -178,4 +167,4 @@ const Register = (props) => {
   );
 };
 
-export default Register;
+export default CreateForm;

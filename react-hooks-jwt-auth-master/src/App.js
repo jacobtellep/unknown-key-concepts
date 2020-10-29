@@ -12,6 +12,7 @@ import Profile from './components/Profile';
 import BoardUser from './components/BoardUser';
 import BoardModerator from './components/BoardModerator';
 import BoardAdmin from './components/BoardAdmin';
+import CreateForm from './components/CreateForm';
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -48,7 +49,7 @@ const App = () => {
           {showModeratorBoard && (
             <li className="nav-item">
               <Link to={'/mod'} className="nav-link">
-                Moderator Board
+                Foreman
               </Link>
             </li>
           )}
@@ -56,7 +57,7 @@ const App = () => {
           {showAdminBoard && (
             <li className="nav-item">
               <Link to={'/admin'} className="nav-link">
-                Admin Board
+                Manager
               </Link>
             </li>
           )}
@@ -109,6 +110,7 @@ const App = () => {
           <Route path="/user" component={BoardUser} />
           <Route path="/mod" component={BoardModerator} />
           <Route path="/admin" component={BoardAdmin} />
+          <Route exact path="/create-form" component={CreateForm} />
         </Switch>
       </div>
     </div>
